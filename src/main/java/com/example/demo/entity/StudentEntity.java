@@ -1,9 +1,21 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+
 @Entity
-@Data
-public class StudentEntity {
+@Table(name = "students")
+public class Student {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private String rollNumber;
+
     private String name;
-    private String regNo;
+    private String department;
+    private Integer year;
+
+    // getters & setters
 }

@@ -1,9 +1,23 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.Set;
+
 @Entity
-@Data
+@Table(name = "exam_sessions")
 public class ExamSession {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String examName;
-    private String date;
+
+    private String courseCode;
+    private LocalDate examDate;
+    private String examTime;
+
+    @ManyToMany
+    private Set<Student> students;
+
+    // getters & setters
 }

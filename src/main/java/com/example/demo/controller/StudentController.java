@@ -1,23 +1,31 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.Student;
+import com.example.demo.service.StudentService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/students")
-@Tag(name = "Students")
 public class StudentController {
 
-    private final StudentRepository repo;
+    private final StudentService studentService;
 
-    public StudentController(StudentRepository repo) {
-        this.repo = repo;
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @PostMapping
-    @Operation(summary = "Add student")
-    public StudentEntity add(@RequestBody StudentEntity s) {
-        return repo.save(s);
+    public Student addStudent(@RequestBody Student student) {
+        return studentService.addStudent(student);
     }
 
     @GetMapping
-    @Operation(summary = "List students")
-    public List<StudentEntity> list() {
-        return repo.findAll();
+    public List<Student> getAllStudents() {
+        return studentService.getAllStudents();
     }
 }

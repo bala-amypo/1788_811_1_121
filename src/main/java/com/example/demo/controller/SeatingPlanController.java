@@ -1,32 +1,36 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.SeatingPlan;
+import com.example.demo.service.SeatingPlanService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/plans")
-@Tag(name = "Seating Plans")
 public class SeatingPlanController {
 
-    private final SeatingPlanRepository repo;
+    private final SeatingPlanService seatingPlanService;
 
-    public SeatingPlanController(SeatingPlanRepository repo) {
-        this.repo = repo;
+    @Autowired
+    public SeatingPlanController(SeatingPlanService seatingPlanService) {
+        this.seatingPlanService = seatingPlanService;
     }
 
     @PostMapping("/generate/{sessionId}")
-    @Operation(summary = "Generate seating plan")
-    public SeatingPlan generate(@PathVariable Long sessionId) {
-        SeatingPlan p = new SeatingPlan();
-        p.setSessionId(sessionId);
-        p.setPlanDetails("Auto-generated");
-        return repo.save(p);
+    public SeatingPlan generatePlan(@PathVariable Long sessionId) {
+        return seatingPlanService.generatePlan(sessionId);
     }
 
     @GetMapping("/{planId}")
-    @Operation(summary = "Get seating plan")
-    public SeatingPlan get(@PathVariable Long planId) {
-        return repo.findById(planId).orElse(null);
+    public SeatingPlan getPlan(@PathVariable Long planId) {
+        return seatingPlanService.getPlan(planId);
     }
 
     @GetMapping("/session/{sessionId}")
-    @Operation(summary = "List plans for session")
-    public List<SeatingPlan> list(@PathVariable Long sessionId) {
-        return repo.findBySessionId(sessionId);
+    public List<SeatingPlan> getPlansBySession(@PathVariable Long sessionId) {
+        return seatingPlanService.getPlansBySession(sessionId);
     }
 }

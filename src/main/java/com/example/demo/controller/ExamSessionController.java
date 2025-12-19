@@ -1,23 +1,29 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.ExamSession;
+import com.example.demo.service.ExamSessionService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/sessions")
-@Tag(name = "Sessions")
 public class ExamSessionController {
 
-    private final ExamSessionRepository repo;
+    private final ExamSessionService examSessionService;
 
-    public ExamSessionController(ExamSessionRepository repo) {
-        this.repo = repo;
+    @Autowired
+    public ExamSessionController(ExamSessionService examSessionService) {
+        this.examSessionService = examSessionService;
     }
 
     @PostMapping
-    @Operation(summary = "Create exam session")
-    public ExamSession create(@RequestBody ExamSession s) {
-        return repo.save(s);
+    public ExamSession createSession(@RequestBody ExamSession session) {
+        return examSessionService.createSession(session);
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get session details")
-    public ExamSession get(@PathVariable Long id) {
-        return repo.findById(id).orElse(null);
+    @GetMapping("/{sessionId}")
+    public ExamSession getSession(@PathVariable Long sessionId) {
+        return examSessionService.getSession(sessionId);
     }
 }

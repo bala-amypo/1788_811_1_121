@@ -1,23 +1,31 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.ExamRoom;
+import com.example.demo.service.ExamRoomService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/rooms")
-@Tag(name = "Rooms")
 public class ExamRoomController {
 
-    private final LocationRepository repo;
+    private final ExamRoomService examRoomService;
 
-    public ExamRoomController(LocationRepository repo) {
-        this.repo = repo;
+    @Autowired
+    public ExamRoomController(ExamRoomService examRoomService) {
+        this.examRoomService = examRoomService;
     }
 
     @PostMapping
-    @Operation(summary = "Add room")
-    public Location add(@RequestBody Location r) {
-        return repo.save(r);
+    public ExamRoom addRoom(@RequestBody ExamRoom room) {
+        return examRoomService.addRoom(room);
     }
 
     @GetMapping
-    @Operation(summary = "List rooms")
-    public List<Location> list() {
-        return repo.findAll();
+    public List<ExamRoom> getAllRooms() {
+        return examRoomService.getAllRooms();
     }
 }

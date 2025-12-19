@@ -13,21 +13,11 @@ public class Location {
     @Column(unique = true, nullable = false)
     private String locationCode;
 
-    private String name;
+    private String locationName;
 
     private Integer capacity;
 
-    // Constructors
-    public Location() {
-    }
-
-    public Location(String locationCode, String name, Integer capacity) {
-        this.locationCode = locationCode;
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    // Getters and Setters
+    // ===== GETTERS =====
     public Long getId() {
         return id;
     }
@@ -36,20 +26,25 @@ public class Location {
         return locationCode;
     }
 
-    public void setLocationCode(String locationCode) {
-        this.locationCode = locationCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getLocationName() {
+        return locationName;
     }
 
     public Integer getCapacity() {
         return capacity;
+    }
+
+    // ===== SETTERS =====
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLocationCode(String locationCode) {
+        this.locationCode = locationCode;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     public void setCapacity(Integer capacity) {

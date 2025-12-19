@@ -14,8 +14,30 @@ public class Student {
     private String rollNumber;
 
     private String name;
-    private String department;
-    private Integer year;
 
-    // getters & setters
+    // ===== GETTERS =====
+    public Long getId() {
+        return id;
+    }
+
+    public String getRollNumber() {
+        return rollNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    // ===== SETTERS =====
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRollNumber(String rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

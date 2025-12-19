@@ -1,31 +1,58 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "seating_plans")
+@Table(name = "seating_plan")
 public class SeatingPlan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // FK to ExamSession
     @ManyToOne
+    @JoinColumn(name = "exam_session_id")
     private ExamSession examSession;
 
+    // FK to Location
     @ManyToOne
-    private ExamRoom room;
+    @JoinColumn(name = "location_id")
+    private Location location;
 
-    @Lob
-    private String arrangementJson;
+    private Integer seatNumber;
 
-    private LocalDateTime generatedAt;
-
-    @PrePersist
-    public void onCreate() {
-        this.generatedAt = LocalDateTime.now();
+    // ===== GETTERS =====
+    public Long getId() {
+        return id;
     }
 
-    // getters & setters
+    public ExamSession getExamSession() {
+        return examSession;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Integer getSeatNumber() {
+        return seatNumber;
+    }
+
+    // ===== SETTERS =====
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setExamSession(ExamSession examSession) {
+        this.examSession = examSession;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setSeatNumber(Integer seatNumber) {
+        this.seatNumber = seatNumber;
+    }
 }

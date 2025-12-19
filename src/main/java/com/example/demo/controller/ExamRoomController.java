@@ -1,23 +1,23 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import com.example.demo.model.ExamRoom;
 import com.example.demo.service.ExamRoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rooms")
 public class ExamRoomController {
 
-    private final ExamRoomService examRoomService;
-
     @Autowired
-    public ExamRoomController(ExamRoomService examRoomService) {
-        this.examRoomService = examRoomService;
-    }
+    private ExamRoomService examRoomService;
 
     @PostMapping
     public ExamRoom addRoom(@RequestBody ExamRoom room) {

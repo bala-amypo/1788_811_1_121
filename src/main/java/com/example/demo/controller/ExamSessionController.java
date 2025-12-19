@@ -4,18 +4,19 @@ import com.example.demo.model.ExamSession;
 import com.example.demo.service.ExamSessionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sessions")
 public class ExamSessionController {
 
-    private final ExamSessionService examSessionService;
-
     @Autowired
-    public ExamSessionController(ExamSessionService examSessionService) {
-        this.examSessionService = examSessionService;
-    }
+    private ExamSessionService examSessionService;
 
     @PostMapping
     public ExamSession createSession(@RequestBody ExamSession session) {

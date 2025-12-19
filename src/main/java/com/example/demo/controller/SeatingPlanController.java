@@ -1,23 +1,23 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import com.example.demo.model.SeatingPlan;
 import com.example.demo.service.SeatingPlanService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/plans")
 public class SeatingPlanController {
 
-    private final SeatingPlanService seatingPlanService;
-
     @Autowired
-    public SeatingPlanController(SeatingPlanService seatingPlanService) {
-        this.seatingPlanService = seatingPlanService;
-    }
+    private SeatingPlanService seatingPlanService;
 
     @PostMapping("/generate/{sessionId}")
     public SeatingPlan generatePlan(@PathVariable Long sessionId) {

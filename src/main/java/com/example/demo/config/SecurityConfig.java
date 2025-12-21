@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -15,16 +17,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/login",
-                    "/logout",
-                    "/h2-console/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                        "/login",
+                        "/h2-console/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
@@ -33,12 +34,9 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/", true)
                 .permitAll()
             )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
+            .logout(logout -> logout.permitAll());
 
-        // For H2 console
+        // Needed for H2 console
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
@@ -46,17 +44,23 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails admin = User.withUsername("admin")
-                .password("{noop}admin123")
+        UserDetails user = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin123"))
                 .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin);
+        return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 🔐 MAIN SECURITY RULES
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -41,19 +41,17 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-            // Logout config
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             );
 
-        // Required for H2 Console
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
 
-    // ✅ THIS FIXES YOUR AuthenticationManager ERROR
+  
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration

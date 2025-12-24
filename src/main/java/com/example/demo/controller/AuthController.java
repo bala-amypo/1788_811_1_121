@@ -24,9 +24,9 @@ public class AuthController {
     public String register(@RequestBody RegisterRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword()); // plain for now
+        user.setPassword(request.getPassword());
         userRepository.save(user);
-        return "User registered";
+        return "User registered successfully";
     }
 
     @PostMapping("/login")

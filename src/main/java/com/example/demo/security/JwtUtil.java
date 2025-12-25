@@ -10,9 +10,13 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    // Secret key used to sign JWT
     private static final String SECRET_KEY = "mysecretkey12345";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
 
+    // Token validity: 1 hour
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
+
+    // Generate JWT token
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -22,6 +26,7 @@ public class JwtUtil {
                 .compact();
     }
 
+    // Extract username from token
     public String extractUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
@@ -30,6 +35,7 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
+    // Validate token
     public boolean validateToken(String token) {
         try {
             extractUsername(token);

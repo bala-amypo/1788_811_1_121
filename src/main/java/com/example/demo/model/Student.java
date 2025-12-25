@@ -9,17 +9,41 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String rollNumber;   // ✅ REQUIRED
     private String department;
     private int year;
 
     public Student() {}
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public int getYear() { return year; }
-    public void setYear(int year) { this.year = year; }
+    public String getRollNumber() {
+        return rollNumber;
+    }
+
+    public void setRollNumber(String rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
 }

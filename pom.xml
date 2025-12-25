@@ -77,8 +77,10 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
+              <version>7.10.2</version>
+                 <scope>test</scope>
+                   </dependency>
+
 
     </dependencies>
 

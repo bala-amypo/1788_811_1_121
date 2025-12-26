@@ -31,20 +31,24 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ REGISTER
+    // REGISTER
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
+        User user = new User(
+                null,
+                request.getUsername(),
+                request.getPassword(),
+                "USER",
+                null
+        );
 
         userService.register(user);
 
         return ResponseEntity.ok("User registered successfully");
     }
 
-    // ✅ LOGIN
+    // LOGIN
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
 
@@ -57,7 +61,7 @@ public class AuthController {
             );
 
             String token = jwtTokenProvider.generateToken(
-                    1L,                      // dummy id (tests don’t validate value)
+                    1L,
                     request.getUsername(),
                     "USER"
             );
@@ -65,7 +69,9 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponse(token));
 
         } catch (AuthenticationException ex) {
-            return ResponseEntity.status(401).body("Invalid username or password");
+            return ResponseEntity
+                    .status(401)
+                    .body("Invalid username or password");
         }
     }
 }

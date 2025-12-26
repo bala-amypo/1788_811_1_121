@@ -5,10 +5,9 @@ import com.example.demo.model.ExamSession;
 import com.example.demo.repository.ExamSessionRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.ExamSessionService;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-@Service
+
 public class ExamSessionServiceImpl implements ExamSessionService {
 
     private final ExamSessionRepository sessionRepository;

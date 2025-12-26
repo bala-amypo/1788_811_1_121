@@ -5,11 +5,10 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.SeatingPlanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-@Service
+
 public class SeatingPlanServiceImpl implements SeatingPlanService {
 
     private final ExamSessionRepository sessionRepository;

@@ -4,6 +4,8 @@ import com.example.demo.model.ExamRoom;
 import java.util.List;
 
 public interface ExamRoomService {
-    ExamRoom save(ExamRoom room);
+
+    ExamRoom addRoom(ExamRoom room);
+
     List<ExamRoom> getAllRooms();
 }

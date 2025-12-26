@@ -4,75 +4,94 @@ import com.example.demo.exception.ApiException;
 import com.example.demo.model.ExamRoom;
 import com.example.demo.model.ExamSession;
 import com.example.demo.model.SeatingPlan;
-import com.example.demo.model.Student;
 import com.example.demo.repository.ExamRoomRepository;
 import com.example.demo.repository.ExamSessionRepository;
 import com.example.demo.repository.SeatingPlanRepository;
 import com.example.demo.service.SeatingPlanService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 @Service
 public class SeatingPlanServiceImpl implements SeatingPlanService {
 
-    private final ExamSessionRepository sessionRepository;
-    private final SeatingPlanRepository planRepository;
-    private final ExamRoomRepository roomRepository;
+    private final ExamSessionRepository sessionRepo;
+    private final SeatingPlanRepository planRepo;
+    private final ExamRoomRepository roomRepo;
 
-    public SeatingPlanServiceImpl(ExamSessionRepository sessionRepository,
-                                  SeatingPlanRepository planRepository,
-                                  ExamRoomRepository roomRepository) {
-        this.sessionRepository = sessionRepository;
-        this.planRepository = planRepository;
-        this.roomRepository = roomRepository;
+    public SeatingPlanServiceImpl(ExamSessionRepository sessionRepo,
+                                  SeatingPlanRepository planRepo,
+                                  ExamRoomRepository roomRepo) {
+        this.sessionRepo = sessionRepo;
+        this.planRepo = planRepo;
+        this.roomRepo = roomRepo;
     }
 
     @Override
     public SeatingPlan generatePlan(Long sessionId) {
-        ExamSession session = sessionRepository.findById(sessionId)
+
+        ExamSession session = sessionRepo.findById(sessionId)
                 .orElseThrow(() -> new ApiException("Session not found"));
 
-        List<ExamRoom> rooms = roomRepository.findAll();
+        if (session.getStudents() == null || session.getStudents().isEmpty()) {
+            throw new ApiException("No students in session");
+        }
+
+        int studentCount = session.getStudents().size();
+
+        List<ExamRoom> rooms = roomRepo.findAll();
         if (rooms.isEmpty()) {
             throw new ApiException("No room available");
         }
 
-        int studentsCount = session.getStudents().size();
-        ExamRoom selected = rooms.stream()
-                .filter(r -> r.getCapacity() >= studentsCount)
-                .findFirst()
-                .orElseThrow(() -> new ApiException("No room with sufficient capacity"));
+        ExamRoom selectedRoom = null;
 
-        Map<String, String> arrangement = new LinkedHashMap<>();
-        for (Student s : session.getStudents()) {
-            arrangement.put(s.getRollNumber(), selected.getRoomNumber());
+        // 🔥 NO STREAMS — MANUAL CAPACITY CHECK
+        for (ExamRoom room : rooms) {
+            if (room.getCapacity() >= studentCount) {
+                selectedRoom = room;
+                break;
+            }
         }
 
-        try {
-            String json = new ObjectMapper().writeValueAsString(arrangement);
-            SeatingPlan plan = SeatingPlan.builder()
-                    .examSession(session)
-                    .room(selected)
-                    .arrangementJson(json)
-                    .generatedAt(LocalDateTime.now())
-                    .build();
-            return planRepository.save(plan);
-        } catch (Exception e) {
-            throw new ApiException("Failed to generate plan");
+        if (selectedRoom == null) {
+            throw new ApiException("No room available");
         }
+
+        // 🔥 Seat-wise arrangement: Seat 1, Seat 2, ...
+        StringBuilder arrangement = new StringBuilder("{");
+        int seatNo = 1;
+
+        for (var student : session.getStudents()) {
+            arrangement.append("\"Seat ")
+                       .append(seatNo++)
+                       .append("\":\"")
+                       .append(student.getRollNumber())
+                       .append("\",");
+        }
+
+        // remove last comma
+        arrangement.deleteCharAt(arrangement.length() - 1);
+        arrangement.append("}");
+
+        SeatingPlan plan = new SeatingPlan();
+        plan.setExamSession(session);
+        plan.setRoom(selectedRoom);
+        plan.setGeneratedAt(LocalDateTime.now());
+        plan.setArrangementJson(arrangement.toString());
+
+        return planRepo.save(plan);
     }
 
     @Override
     public SeatingPlan getPlan(Long id) {
-        return planRepository.findById(id)
+        return planRepo.findById(id)
                 .orElseThrow(() -> new ApiException("Plan not found"));
     }
 
     @Override
     public List<SeatingPlan> getPlansBySession(Long sessionId) {
-        return planRepository.findByExamSessionId(sessionId);
+        return planRepo.findByExamSessionId(sessionId);
     }
 }

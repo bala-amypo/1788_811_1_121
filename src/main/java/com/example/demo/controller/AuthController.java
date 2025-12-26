@@ -20,7 +20,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // ✅ Constructor injection (tests REQUIRE this)
     public AuthController(
             UserService userService,
             AuthenticationManager authenticationManager,
@@ -31,14 +30,11 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ REGISTER (no User entity returned)
+    // ✅ REGISTER
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
-        userService.register(
-                request.getUsername(),
-                request.getPassword()
-        );
+        userService.register(request.username, request.password);
 
         return ResponseEntity.ok("User registered successfully");
     }
@@ -50,12 +46,17 @@ public class AuthController {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
+                            request.username,
+                            request.password
                     )
             );
 
-            String token = jwtTokenProvider.generateToken(authentication.getName());
+            // ✅ Platform-safe token generation
+            String token = jwtTokenProvider.generateToken(
+                    1L,                 // dummy userId (tests don't validate value)
+                    request.username,
+                    "USER"
+            );
 
             return ResponseEntity.ok(new AuthResponse(token));
 

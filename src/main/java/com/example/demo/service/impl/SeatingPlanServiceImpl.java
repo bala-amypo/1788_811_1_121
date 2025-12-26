@@ -43,10 +43,22 @@ public class SeatingPlanServiceImpl implements SeatingPlanService {
                 SeatingPlan plan = new SeatingPlan();
                 plan.setRoomNumber(room.getRoomNumber());
                 plan.setRollNumber(student.getRollNumber());
+                plan.setSession(session);
 
                 plans.add(seatingPlanRepository.save(plan));
             }
         }
         return plans;
+    }
+
+    @Override
+    public SeatingPlan getPlan(Long id) {
+        return seatingPlanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Seating plan not found"));
+    }
+
+    @Override
+    public List<SeatingPlan> getPlansBySession(Long sessionId) {
+        return seatingPlanRepository.findBySessionId(sessionId);
     }
 }

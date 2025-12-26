@@ -10,10 +10,26 @@ public class SeatingPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String roomNumber;
+
+    @Column(nullable = false)
     private String rollNumber;
 
-    public SeatingPlan() {}
+    @ManyToOne
+    @JoinColumn(name = "session_id", nullable = false)
+    private ExamSession session;
+
+    // =====================
+    // Constructors
+    // =====================
+
+    public SeatingPlan() {
+    }
+
+    // =====================
+    // Getters & Setters
+    // =====================
 
     public Long getId() {
         return id;
@@ -23,19 +39,23 @@ public class SeatingPlan {
         return roomNumber;
     }
 
-    public String getRollNumber() {
-        return rollNumber;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 
+    public String getRollNumber() {
+        return rollNumber;
+    }
+
     public void setRollNumber(String rollNumber) {
         this.rollNumber = rollNumber;
+    }
+
+    public ExamSession getSession() {
+        return session;
+    }
+
+    public void setSession(ExamSession session) {
+        this.session = session;
     }
 }

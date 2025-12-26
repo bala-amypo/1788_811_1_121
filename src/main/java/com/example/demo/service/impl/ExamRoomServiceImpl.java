@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ApiException;
 import com.example.demo.model.ExamRoom;
 import com.example.demo.repository.ExamRoomRepository;
 import com.example.demo.service.ExamRoomService;
@@ -10,19 +11,26 @@ import java.util.List;
 @Service
 public class ExamRoomServiceImpl implements ExamRoomService {
 
-    private final ExamRoomRepository examRoomRepository;
+    private final ExamRoomRepository roomRepository;
 
-    public ExamRoomServiceImpl(ExamRoomRepository examRoomRepository) {
-        this.examRoomRepository = examRoomRepository;
+    public ExamRoomServiceImpl(ExamRoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
     }
 
     @Override
     public ExamRoom addRoom(ExamRoom room) {
-        return examRoomRepository.save(room);
+        if (room.getRows() <= 0 || room.getColumns() <= 0) {
+            throw new ApiException("Invalid room dimensions");
+        }
+        if (roomRepository.findByRoomNumber(room.getRoomNumber()).isPresent()) {
+            throw new ApiException("Room already exists");
+        }
+        room.ensureCapacityMatches();
+        return roomRepository.save(room);
     }
 
     @Override
     public List<ExamRoom> getAllRooms() {
-        return examRoomRepository.findAll();
+        return roomRepository.findAll();
     }
 }

@@ -9,6 +9,4 @@ public interface StudentService {
     Student addStudent(Student student);
 
     List<Student> getAllStudents();
-
-    List<Student> getStudentsByYear(int year);
 }

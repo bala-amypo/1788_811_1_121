@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
-import com.example.demo.entity.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 
@@ -21,7 +20,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // ✅ Constructor injection (MANDATORY for tests)
+    // ✅ Constructor injection (tests REQUIRE this)
     public AuthController(
             UserService userService,
             AuthenticationManager authenticationManager,
@@ -32,16 +31,16 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ✅ REGISTER
+    // ✅ REGISTER (no User entity returned)
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AuthRequest request) {
+    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
-        User user = userService.register(
+        userService.register(
                 request.getUsername(),
                 request.getPassword()
         );
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     // ✅ LOGIN

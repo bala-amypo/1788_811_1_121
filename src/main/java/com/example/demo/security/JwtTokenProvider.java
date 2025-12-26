@@ -2,15 +2,31 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Component
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
     private final long validityInMillis;
 
+    /**
+     * Default constructor used by Spring Boot at runtime
+     */
+    public JwtTokenProvider() {
+        this.secretKey = Keys.hmacShaKeyFor(
+                "this_is_a_test_secret_key_must_be_long_enough_for_hmac_sha_which_is_long"
+                        .getBytes()
+        );
+        this.validityInMillis = 3600000; // 1 hour
+    }
+
+    /**
+     * Constructor used explicitly in tests
+     */
     public JwtTokenProvider(String secret, long validityInMillis) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
         this.validityInMillis = validityInMillis;

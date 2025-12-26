@@ -34,7 +34,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
-        userService.register(request.username, request.password);
+        userService.register(
+                request.getUsername(),
+                request.getPassword()
+        );
 
         return ResponseEntity.ok("User registered successfully");
     }
@@ -46,15 +49,14 @@ public class AuthController {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.username,
-                            request.password
+                            request.getUsername(),
+                            request.getPassword()
                     )
             );
 
-            // ✅ Platform-safe token generation
             String token = jwtTokenProvider.generateToken(
-                    1L,                 // dummy userId (tests don't validate value)
-                    request.username,
+                    1L,
+                    request.getUsername(),
                     "USER"
             );
 

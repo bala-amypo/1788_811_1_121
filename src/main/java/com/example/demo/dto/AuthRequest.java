@@ -1,12 +1,18 @@
 package com.example.demo.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class AuthRequest {
 
-    private String email;
+    private String username;
     private String password;
+
+    public AuthRequest() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

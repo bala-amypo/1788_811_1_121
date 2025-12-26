@@ -4,30 +4,31 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "exam_room")
+@Table(name = "exam_rooms")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ExamRoom {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(unique = true)
     private String roomNumber;
-
+    
+    @Column(name = "room_rows")
     private Integer rows;
-
+    
+    @Column(name = "room_columns")
     private Integer columns;
-
+    
     private Integer capacity;
 
     public void ensureCapacityMatches() {
-        if (rows != null && columns != null) {
-            this.capacity = rows * columns;
+        if (this.rows != null && this.columns != null) {
+            this.capacity = this.rows * this.columns;
         }
     }
 }

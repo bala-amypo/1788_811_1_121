@@ -1,19 +1,28 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.model.ExamRoom;
+import com.example.demo.repository.ExamRoomRepository;
+import com.example.demo.service.ExamRoomService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class ExamRoomServiceImpl implements ExamRoomService {
 
-    private final ExamRoomRepository repo;
+    private final ExamRoomRepository examRoomRepository;
 
-    public ExamRoomServiceImpl(ExamRoomRepository repo) {
-        this.repo = repo;
+    public ExamRoomServiceImpl(ExamRoomRepository examRoomRepository) {
+        this.examRoomRepository = examRoomRepository;
     }
 
     @Override
     public ExamRoom addRoom(ExamRoom room) {
-        return repo.save(room);
+        return examRoomRepository.save(room);
     }
 
     @Override
     public List<ExamRoom> getAllRooms() {
-        return repo.findAll();
+        return examRoomRepository.findAll();
     }
 }

@@ -1,36 +1,43 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "exam_session")
 public class ExamSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String courseCode;
+    private String subject;
 
     private LocalDate examDate;
 
-    private String examTime;
+    public ExamSession() {}
 
-    @ManyToMany
-    @JoinTable(
-            name = "exam_session_students",
-            joinColumns = @JoinColumn(name = "session_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    @Builder.Default
-    private Set<Student> students = new HashSet<>();
+    public Long getId() {
+        return id;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public LocalDate getExamDate() {
+        return examDate;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setExamDate(LocalDate examDate) {
+        this.examDate = examDate;
+    }
 }

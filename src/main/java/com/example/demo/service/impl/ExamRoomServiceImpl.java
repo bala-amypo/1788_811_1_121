@@ -4,6 +4,7 @@ import com.example.demo.exception.ApiException;
 import com.example.demo.model.ExamRoom;
 import com.example.demo.repository.ExamRoomRepository;
 import com.example.demo.service.ExamRoomService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
@@ -8,7 +9,6 @@ import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,24 +29,25 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ---------------- REGISTER ----------------
+    // ✅ REGISTER
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody AuthRequest request) {
+    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setRole("USER");
 
-        User savedUser = userService.register(user);
-        return ResponseEntity.ok(savedUser);
+        userService.register(user);
+
+        return ResponseEntity.ok("User registered successfully");
     }
 
-    // ---------------- LOGIN ----------------
+    // ✅ LOGIN
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
-        Authentication authentication = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
@@ -61,6 +62,6 @@ public class AuthController {
                 user.getRole()
         );
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }

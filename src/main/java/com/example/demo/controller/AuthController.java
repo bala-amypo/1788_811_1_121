@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
+import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 
@@ -34,10 +35,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest request) {
 
-        userService.register(
-                request.getUsername(),
-                request.getPassword()
-        );
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+
+        userService.register(user);
 
         return ResponseEntity.ok("User registered successfully");
     }
@@ -55,7 +57,7 @@ public class AuthController {
             );
 
             String token = jwtTokenProvider.generateToken(
-                    1L,
+                    1L,                      // dummy id (tests don’t validate value)
                     request.getUsername(),
                     "USER"
             );

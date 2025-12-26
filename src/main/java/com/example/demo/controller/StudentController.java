@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Student;
 import com.example.demo.service.StudentService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,19 +10,24 @@ import java.util.List;
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentService studentService;
+    private final StudentService service;
 
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
+    public StudentController(StudentService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<Student> add(@RequestBody Student student) {
-        return ResponseEntity.ok(studentService.addStudent(student));
+    public Student addStudent(@RequestBody Student student) {
+        return service.addStudent(student);
     }
 
     @GetMapping
-    public ResponseEntity<List<Student>> list() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public List<Student> getAllStudents() {
+        return service.getAllStudents();
+    }
+
+    @GetMapping("/year/{year}")
+    public List<Student> getByYear(@PathVariable int year) {
+        return service.getStudentsByYear(year);
     }
 }

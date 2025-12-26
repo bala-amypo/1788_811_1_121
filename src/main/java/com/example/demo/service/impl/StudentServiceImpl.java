@@ -6,7 +6,7 @@ import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.StudentService;
 
 import java.util.List;
-
+@service
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;

@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,47 +29,38 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // REGISTER
+    // ---------------- REGISTER ----------------
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
+    public ResponseEntity<User> register(@RequestBody AuthRequest request) {
 
-        User user = new User(
-                null,
-                request.getUsername(),
-                request.getPassword(),
-                "USER",
-                null
-        );
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole("USER");
 
-        userService.register(user);
-
-        return ResponseEntity.ok("User registered successfully");
+        User savedUser = userService.register(user);
+        return ResponseEntity.ok(savedUser);
     }
 
-    // LOGIN
+    // ---------------- LOGIN ----------------
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
 
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                    )
-            );
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
 
-            String token = jwtTokenProvider.generateToken(
-                    1L,
-                    request.getUsername(),
-                    "USER"
-            );
+        User user = userService.findByEmail(request.getEmail());
 
-            return ResponseEntity.ok(new AuthResponse(token));
+        String token = jwtTokenProvider.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
 
-        } catch (AuthenticationException ex) {
-            return ResponseEntity
-                    .status(401)
-                    .body("Invalid username or password");
-        }
+        return ResponseEntity.ok(token);
     }
 }

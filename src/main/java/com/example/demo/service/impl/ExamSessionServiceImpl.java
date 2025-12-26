@@ -1,25 +1,33 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.model.ExamSession;
+import com.example.demo.repository.ExamSessionRepository;
+import com.example.demo.service.ExamSessionService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class ExamSessionServiceImpl implements ExamSessionService {
 
-    private final ExamSessionRepository repo;
+    private final ExamSessionRepository repository;
 
-    public ExamSessionServiceImpl(ExamSessionRepository repo) {
-        this.repo = repo;
+    public ExamSessionServiceImpl(ExamSessionRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public ExamSession createSession(ExamSession session) {
-        return repo.save(session);
+        return repository.save(session);
     }
 
     @Override
     public ExamSession getSession(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public List<ExamSession> getAllSessions() {
-        return repo.findAll();
+        return repository.findAll();
     }
 }

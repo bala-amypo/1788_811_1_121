@@ -2,11 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.ExamSession;
 import com.example.demo.service.ExamSessionService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/sessions")
+@RequestMapping("/api/sessions")
 public class ExamSessionController {
 
     private final ExamSessionService sessionService;
@@ -16,12 +17,17 @@ public class ExamSessionController {
     }
 
     @PostMapping
-    public ResponseEntity<ExamSession> create(@RequestBody ExamSession session) {
-        return ResponseEntity.ok(sessionService.createSession(session));
+    public ExamSession createSession(@RequestBody ExamSession session) {
+        return sessionService.createSession(session);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExamSession> get(@PathVariable Long id) {
-        return ResponseEntity.ok(sessionService.getSession(id));
+    public ExamSession getSession(@PathVariable Long id) {
+        return sessionService.getSession(id);
+    }
+
+    @GetMapping
+    public List<ExamSession> getAllSessions() {
+        return sessionService.getAllSessions();
     }
 }

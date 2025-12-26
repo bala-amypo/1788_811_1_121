@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "exam_session")
@@ -14,6 +15,14 @@ public class ExamSession {
     private String subject;
 
     private LocalDate examDate;
+
+    @ManyToMany
+    @JoinTable(
+        name = "exam_session_students",
+        joinColumns = @JoinColumn(name = "exam_session_id"),
+        inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> students;
 
     public ExamSession() {}
 
@@ -29,6 +38,10 @@ public class ExamSession {
         return examDate;
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -39,5 +52,9 @@ public class ExamSession {
 
     public void setExamDate(LocalDate examDate) {
         this.examDate = examDate;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

@@ -1,42 +1,33 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "exam_room")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ExamRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String roomNumber;
+
+    private Integer rows;
+
+    private Integer columns;
 
     private Integer capacity;
 
-    public ExamRoom() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
+    public void ensureCapacityMatches() {
+        if (rows != null && columns != null) {
+            this.capacity = rows * columns;
+        }
     }
 }

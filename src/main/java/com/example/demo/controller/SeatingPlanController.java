@@ -1,36 +1,29 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import com.example.demo.model.SeatingPlan;
 import com.example.demo.service.SeatingPlanService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequestMapping("/plans")
 public class SeatingPlanController {
 
-    @Autowired
-    private SeatingPlanService seatingPlanService;
+    private final SeatingPlanService planService;
 
-    @PostMapping("/generate/{sessionId}")
-    public SeatingPlan generatePlan(@PathVariable Long sessionId) {
-        return seatingPlanService.generatePlan(sessionId);
+    public SeatingPlanController(SeatingPlanService planService) {
+        this.planService = planService;
     }
 
-    @GetMapping("/{planId}")
-    public SeatingPlan getPlan(@PathVariable Long planId) {
-        return seatingPlanService.getPlan(planId);
+    @GetMapping("/{id}")
+    public ResponseEntity<SeatingPlan> get(@PathVariable Long id) {
+        return ResponseEntity.ok(planService.getPlan(id));
     }
 
-    @GetMapping("/session/{sessionId}")
-    public List<SeatingPlan> getPlansBySession(@PathVariable Long sessionId) {
-        return seatingPlanService.getPlansBySession(sessionId);
+    @GetMapping
+    public ResponseEntity<List<SeatingPlan>> list(@RequestParam Long sessionId) {
+        return ResponseEntity.ok(planService.getPlansBySession(sessionId));
     }
 }

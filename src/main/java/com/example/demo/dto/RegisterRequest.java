@@ -1,14 +1,14 @@
 package com.example.demo.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
 public class RegisterRequest {
-    private String username;
+
+    private String name;
+    private String email;
     private String password;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    private String role;
 }

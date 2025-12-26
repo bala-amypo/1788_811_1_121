@@ -1,31 +1,29 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import com.example.demo.model.ExamRoom;
 import com.example.demo.service.ExamRoomService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rooms")
 public class ExamRoomController {
 
-    @Autowired
-    private ExamRoomService examRoomService;
+    private final ExamRoomService roomService;
+
+    public ExamRoomController(ExamRoomService roomService) {
+        this.roomService = roomService;
+    }
 
     @PostMapping
-    public ExamRoom addRoom(@RequestBody ExamRoom room) {
-        return examRoomService.addRoom(room);
+    public ResponseEntity<ExamRoom> add(@RequestBody ExamRoom room) {
+        return ResponseEntity.ok(roomService.addRoom(room));
     }
 
     @GetMapping
-    public List<ExamRoom> getAllRooms() {
-        return examRoomService.getAllRooms();
+    public ResponseEntity<List<ExamRoom>> list() {
+        return ResponseEntity.ok(roomService.getAllRooms());
     }
 }

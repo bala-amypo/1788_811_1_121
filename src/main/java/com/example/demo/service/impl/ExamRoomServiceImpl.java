@@ -6,7 +6,7 @@ import com.example.demo.repository.ExamRoomRepository;
 import com.example.demo.service.ExamRoomService;
 
 import java.util.List;
-@service
+@Service
 public class ExamRoomServiceImpl implements ExamRoomService {
 
     private final ExamRoomRepository roomRepository;
